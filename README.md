@@ -49,6 +49,10 @@ ACTUAL_DIR=../sut pytest                 # 26 passed, 16 xfailed
 ACTUAL_DIR=../sut pytest --runxfail      # shows the 16 failures behind the open defects
 ```
 
+Known automation issue: on a busy 2-vCPU machine, the UI module's setup (creating the budget) timed out once in 4
+full runs. The next 3 runs were green. The next improvement is to wait on the budget-loaded network call instead of
+on page text.
+
 ## How I worked (and what I'd say in an interview)
 
 - **Risk first.** In a money app the worst defect is a *wrong number nobody notices*, so amount and date entry got
