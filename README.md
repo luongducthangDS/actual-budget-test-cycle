@@ -72,3 +72,7 @@ on page text.
 
 These defects have not yet been checked against Actual's GitHub issue tracker for duplicates. That is the next step
 before opening issues.
+
+## Data and license
+
+Code: MIT ([LICENSE](LICENSE)). Data: System under test: [Actual Budget](https://github.com/actualbudget/actual) (MIT), installed from npm at test time. Test data is created by the tests.

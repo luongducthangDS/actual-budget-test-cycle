@@ -7,12 +7,11 @@ import re
 import uuid
 
 import pytest
+from conftest import PASSWORD, Server
 from playwright.sync_api import sync_playwright
 
-from conftest import PASSWORD, Server
-
 pytestmark = pytest.mark.ui
-XF = dict(strict=True, raises=AssertionError)
+XF = {"strict": True, "raises": AssertionError}
 
 
 @pytest.fixture(scope="module")
@@ -110,13 +109,13 @@ def test_TC_ACC_02_invalid_input_rejected_with_message(page, name, balance, mess
 
 @pytest.mark.xfail(reason="QC-05: '100+50' becomes 10,050.00 in the account dialog (register gives 150.00)", **XF)
 def test_TC_ACC_03_arithmetic_balance_evaluated_or_rejected(page):
-    got, err = create_account(page, f"Expr {uuid.uuid4().hex[:5]}", "100+50")
+    got, _err = create_account(page, f"Expr {uuid.uuid4().hex[:5]}", "100+50")
     assert got in (None, "150.00"), f"silently stored as {got}"
 
 
 @pytest.mark.xfail(reason="QC-06: '1e3' becomes 13.00 in the account dialog", **XF)
 def test_TC_ACC_04_scientific_notation_evaluated_or_rejected(page):
-    got, err = create_account(page, f"Sci {uuid.uuid4().hex[:5]}", "1e3")
+    got, _err = create_account(page, f"Sci {uuid.uuid4().hex[:5]}", "1e3")
     assert got in (None, "1,000.00"), f"silently stored as {got}"
 
 

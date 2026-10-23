@@ -11,15 +11,13 @@ Rules under test (Actual's documented envelope model):
 Scenario dates are in the current month (the budget page opens on it); the next month is visible beside it.
 """
 import datetime
-import re
 
 import pytest
+from conftest import PASSWORD, Server
 from playwright.sync_api import sync_playwright
 
-from conftest import PASSWORD, Server
-
 pytestmark = pytest.mark.ui
-XF = dict(strict=True, raises=AssertionError)
+XF = {"strict": True, "raises": AssertionError}
 
 TODAY = datetime.date.today()
 THIS = TODAY.strftime("%Y%m")

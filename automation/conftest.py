@@ -59,8 +59,9 @@ class Server:
         self.log = self.data / "server.log"
         full_env = {**os.environ, "ACTUAL_HOSTNAME": hostname, "ACTUAL_PORT": str(self.port),
                     "ACTUAL_DATA_DIR": str(self.data), **(env or {})}
+        self._log_file = open(self.log, "w")  # noqa: SIM115  closed in stop(); the server writes to it
         self.proc = subprocess.Popen([str(SERVER_BIN)], cwd=self.data, env=full_env,
-                                     stdout=open(self.log, "w"), stderr=subprocess.STDOUT)
+                                     stdout=self._log_file, stderr=subprocess.STDOUT)
         self.hostname = hostname
         if hostname != "::":
             self._wait()
@@ -84,6 +85,7 @@ class Server:
         if self.proc.poll() is None:
             self.proc.terminate()
             self.proc.wait(timeout=10)
+        self._log_file.close()
         shutil.rmtree(self.data, ignore_errors=True)
 
 

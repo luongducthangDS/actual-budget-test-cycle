@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Lint (ruff)
+        run: pipx run --spec ruff==0.17.2 ruff check .
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -35,7 +37,7 @@ jobs:
           pip install -r automation/requirements.txt
           playwright install --with-deps chromium
 
-      - name: Run Pytest & Playwright Suite (42 test cases)
+      - name: Run pytest + Playwright suite (54 automated checks)
         run: |
           cd automation
           ACTUAL_DIR=../sut pytest --junitxml=reports/junit.xml
