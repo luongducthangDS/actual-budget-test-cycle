@@ -13,7 +13,7 @@ in the transaction register.
 | Requirements traced | **16 / 16** ([RTM](rtm.csv)) |
 | Defects found | **10**: 7 Major, 2 Minor, 1 Trivial ([defect reports](docs/defect-reports.md)) |
 | Root cause identified | 3 of 10 (QC-01, QC-02, QC-04), each with a suggested fix |
-| Automation | 42 / 42 cases in pytest + Playwright, ~2 min, fresh server per test |
+| Automation | 42 / 42 cases in pytest + Playwright, ~2 min, fresh server per test module |
 | False positives reported | **0**: one apparent critical finding was disproved by re-testing and withdrawn |
 
 ### Most important findings
