@@ -1,0 +1,11 @@
+<!-- POST /account/bootstrap {"password": 12345} -> HTTP 500 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>TypeError [ERR_INVALID_ARG_TYPE]: The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received type number (12345)<br> &nbsp; &nbsp;at Function.from (node:buffer:325:9)<br> &nbsp; &nbsp;at Module.hash (/home/claude/sut/actual/node_modules/argon2/argon2.cjs:104:22)<br> &nbsp; &nbsp;at async bootstrap (file:///home/claude/sut/actual/node_modules/@actual-app/sync-server/build/chunks/account-db-CyiKvvrD.js:604:18)<br> &nbsp; &nbsp;at async file:///home/claude/sut/actual/node_modules/@actual-app/sync-server/build/chunks/app-BgMEdvse.js:95:15</pre>
+</body>
+</html>

@@ -1,0 +1,17 @@
+Requirement,Description,Test cases,Passed,Failed,Defects,Coverage status
+R-01,First run lets the owner set a server password,TC-AUTH-01,1,0,,Covered - passed
+R-02,Invalid passwords are rejected with a clear 4xx error,TC-AUTH-02; TC-AUTH-03; TC-AUTH-05a; TC-AUTH-05b; TC-AUTH-05c,2,3,QC-02,Covered - defects open
+R-03,"Once set, the password cannot be replaced through first-run setup",TC-AUTH-04,1,0,,Covered - passed
+R-04,Passwords meet a minimum strength (implied security requirement),TC-AUTH-07a; TC-AUTH-07b; TC-AUTH-07c,0,3,QC-03,Covered - defects open
+R-05,Only the correct password grants a session,TC-AUTH-08; TC-AUTH-09a; TC-AUTH-09b; TC-AUTH-09c; TC-AUTH-10,5,0,,Covered - passed
+R-06,Brute force is limited per client without locking out others,TC-AUTH-11; TC-AUTH-12,2,0,,Covered - passed
+R-07,"Start-up failures are reported, never silent",TC-AVAIL-01,0,1,QC-01,Covered - defects open
+R-08,Normal use of the web app is never rate-limited,TC-AVAIL-02,0,1,QC-04,Covered - defects open
+R-09,Errors never expose internal details,TC-AUTH-06,0,1,QC-02,Covered - defects open
+R-10,An account can be created with a starting balance,TC-ACC-01a; TC-ACC-01b; TC-ACC-01c; TC-ACC-01d; TC-ACC-01e; TC-ACC-01f; TC-ACC-01g,7,0,,Covered - passed
+R-11,Account names are required and unique,TC-ACC-02a; TC-ACC-02b,2,0,,Covered - passed
+R-12,Starting balance accepts only valid amounts and stores exactly what was meant,TC-ACC-02c; TC-ACC-03; TC-ACC-04,1,2,"QC-05, QC-06",Covered - defects open
+R-13,Transaction amounts are parsed consistently and correctly,TC-TX-01a; TC-TX-01b; TC-TX-01c; TC-TX-01d; TC-TX-03; TC-TX-04,4,2,"QC-06, QC-09",Covered - defects open
+R-14,Account balance equals the sum of its transactions,TC-TX-02,1,0,,Covered - passed
+R-15,Transaction dates are valid calendar dates or rejected,TC-TX-05; TC-TX-06,0,2,"QC-07, QC-08",Covered - defects open
+R-16,Amounts are displayed correctly (no negative zero),TC-UI-01,0,1,QC-10,Covered - defects open

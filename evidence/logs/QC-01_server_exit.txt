@@ -1,0 +1,7 @@
+$ ACTUAL_HOSTNAME=:: actual-server   (host without IPv6)
+Checking if there are any migrations to run for direction "up"...
+Migrations: DONE
+Running in production mode - Serving static React app
+Listening on :::50263...
+
+process exit code: 0

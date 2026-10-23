@@ -1,0 +1,46 @@
+ID,Module,Requirement,Title,Technique,Test data,Expected result,Actual result,Status,Defect,Automated by
+TC-AUTH-01,Server setup,R-01,Set server password on first run,Positive,qc-Password-1,200 ok; server reports bootstrapped,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-02,Server setup,R-02,Reject empty password,EP (invalid),"""""",400 error; still not bootstrapped,400 invalid-password,Pass,,automation/tests/test_server_api.py
+TC-AUTH-03,Server setup,R-02,Reject missing password field,EP (invalid),{},400 error; still not bootstrapped,400 no-auth-method-selected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-04,Server setup,R-03,Second bootstrap cannot replace the password,Negative / security,second password,error already-bootstrapped; old password still valid,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-05a,Server setup,R-02,Reject numeric password,EP (wrong type),12345,400 validation error,HTTP 500 TypeError,Fail,QC-02,automation/tests/test_server_api.py
+TC-AUTH-05b,Server setup,R-02,Reject object password,EP (wrong type),"{""a"":1}",400 validation error,HTTP 500 TypeError,Fail,QC-02,automation/tests/test_server_api.py
+TC-AUTH-05c,Server setup,R-02,Reject array password,EP (wrong type),"[""x""]",400 validation error,HTTP 500,Fail,QC-02,automation/tests/test_server_api.py
+TC-AUTH-06,Server setup,R-09,Error responses do not expose internals,Security,12345,No stack trace / file paths in body,Stack trace + absolute paths (NODE_ENV unset),Fail,QC-02,automation/tests/test_server_api.py
+TC-AUTH-07a,Server setup,R-04,Reject single-space password,"BVA (length 1, whitespace)",""" """,400,Accepted; server bootstrapped,Fail,QC-03,automation/tests/test_server_api.py
+TC-AUTH-07b,Server setup,R-04,Reject whitespace-only password,EP,"""   """,400,Accepted,Fail,QC-03,automation/tests/test_server_api.py
+TC-AUTH-07c,Server setup,R-04,Reject 1-character password,BVA,"""a""",400,Accepted,Fail,QC-03,automation/tests/test_server_api.py
+TC-AUTH-08,Login,R-05,Correct password returns a valid session token,Positive,qc-Password-1,token validated by /account/validate,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-09a,Login,R-05,Wrong password rejected,Negative,wrong,400 invalid-password,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-09b,Login,R-05,Password is case-sensitive,EP,QC-PASSWORD-1,400 invalid-password,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-09c,Login,R-05,Trailing space is significant,BVA,qc-Password-1␠,400 invalid-password,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-10,Login,R-05,Forged token rejected,Security,token=forged,validate fails,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-11,Login,R-06,6th failed login within 15 min is blocked for that client only,BVA (5 / 6 attempts),5x wrong then 6th,attempts 1-5: 400; 6th: 429; other client unaffected,As expected,Pass,,automation/tests/test_server_api.py
+TC-AUTH-12,Login,R-06,Successful logins do not count toward the lockout,State,"4 wrong, 5 correct, 1 wrong","5th failure is 400, not 429",As expected,Pass,,automation/tests/test_server_api.py
+TC-AVAIL-01,Availability,R-07,Server must not exit silently when it cannot bind,Error guessing,"host without IPv6, default host ::",keeps running or exits non-zero with an error,prints 'Listening on :::5006' and exits 0,Fail,QC-01,automation/tests/test_server_api.py
+TC-AVAIL-02,Availability,R-08,Normal app use is not rate-limited,Load / usability,3 app loads in 60 s from one browser,app keeps loading,"3rd load blank, 4th 'Too many requests' (18 s)",Fail,QC-04,automation/tests/test_server_api.py
+TC-ACC-01a,Accounts,R-10,Create local account with starting balance,EP valid,1000,"balance shown 1,000.00","1,000.00",Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-01b,Accounts,R-10,Create local account with starting balance,EP valid (grouping),"1,234.56","balance shown 1,234.56","1,234.56",Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-01c,Accounts,R-10,Create local account with starting balance,EP valid (negative),-500,balance shown -500.00,-500.00,Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-01d,Accounts,R-10,Create local account with starting balance,BVA (rounding half-cent),0.005,balance shown 0.01,0.01,Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-01e,Accounts,R-10,Create local account with starting balance,EP (whitespace),  50  ,balance shown 50.00,50.00,Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-01f,Accounts,R-10,Create local account with starting balance,BVA (12 digits),999999999999,"balance shown 999,999,999,999.00","999,999,999,999.00",Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-01g,Accounts,R-10,Create local account with starting balance,EP (locale format),"1.234,56","balance shown 1,234.56","1,234.56",Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-02a,Accounts,R-11,Blank account name rejected,EP (invalid),"name=""""",dialog stays open: 'Name cannot be blank',As expected,Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-02b,Accounts,R-11,Duplicate account name rejected,EP (invalid),Dup twice,'Name Dup already exists',As expected,Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-02c,Accounts,R-12,Non-numeric balance rejected,EP (invalid),abc,'Balance must be a number',As expected,Pass,,automation/tests/test_ui_accounts_register.py
+TC-ACC-03,Accounts,R-12,Arithmetic in starting balance evaluated or rejected,Error guessing,100+50,150.00 or validation error,"10,050.00 saved silently",Fail,QC-05,automation/tests/test_ui_accounts_register.py
+TC-ACC-04,Accounts,R-12,Scientific notation evaluated or rejected,Error guessing,1e3,"1,000.00 or validation error",13.00 saved silently,Fail,QC-06,automation/tests/test_ui_accounts_register.py
+TC-TX-01a,Register,R-13,Deposit integer amount,EP valid,50,50.00,50.00,Pass,,automation/tests/test_ui_accounts_register.py
+TC-TX-01b,Register,R-13,Amount with 3 decimals is rounded,BVA,12.345,12.35,12.35,Pass,,automation/tests/test_ui_accounts_register.py
+TC-TX-01c,Register,R-13,Grouped amount,EP valid,"1,000.50","1,000.50","1,000.50",Pass,,automation/tests/test_ui_accounts_register.py
+TC-TX-01d,Register,R-13,Arithmetic expression evaluated,EP valid,100+50,150.00,150.00,Pass,,automation/tests/test_ui_accounts_register.py
+TC-TX-02,Register,R-14,Account balance equals previous balance + new transaction,Calculation,25.75,balance +25.75,As expected,Pass,,automation/tests/test_ui_accounts_register.py
+TC-TX-03,Register,R-13,Scientific notation in amount,Error guessing,1e3,"1,000.00 or rejected",1.00 saved,Fail,QC-06,automation/tests/test_ui_accounts_register.py
+TC-TX-04,Register,R-13,Non-numeric amount not saved as zero,EP (invalid),abc,validation or not saved,0.00 transaction saved,Fail,QC-09,automation/tests/test_ui_accounts_register.py
+TC-TX-05,Register,R-15,Impossible calendar date not silently changed,BVA (day 30 in Feb),02/30/2026,rejected or clearly corrected,saved as 02/03/2026,Fail,QC-07,automation/tests/test_ui_accounts_register.py
+TC-TX-06,Register,R-15,Garbage date not replaced by today,EP (invalid),13/45/2026,rejected,saved as today's date,Fail,QC-08,automation/tests/test_ui_accounts_register.py
+TC-UI-01,Budget,R-16,No negative zero on a fresh budget,Error guessing,new budget,0.00,-0.00 in Overspent/Budgeted/For next month,Fail,QC-10,automation/tests/test_ui_accounts_register.py
+ET-01,Exploratory,—,Charter: explore first-run setup and login with odd inputs,Session-based,—,—,"Found QC-02, QC-03",Done,"QC-02, QC-03",manual
+ET-02,Exploratory,—,Charter: explore server start-up in a container,Session-based,—,—,Found QC-01 (root cause traced to Express 5 listen callback),Done,QC-01,manual
+ET-03,Exploratory,—,Charter: explore number and date entry across dialogs,Session-based,—,—,Found QC-05..QC-09; confirmed lenient locale parsing works,Done,QC-05..09,manual
