@@ -8,12 +8,12 @@ silently, so the recommendation is to **fix QC-05, QC-06 and QC-07 before the ne
 
 | | Count |
 |---|---:|
-| Test cases (scripted) | 42 |
-| Passed | 26 |
-| Failed (defect raised) | 16 |
-| Exploratory charters | 3 |
-| Automated | 42 / 42 (pytest: 26 passed, 16 xfailed, in ~2 min) |
-| Requirements covered | 16 / 16 (7 fully passing, 9 with open defects) |
+| Test cases (scripted) | 54 (cycle 1: 42, cycle 2 Budget: 12) |
+| Passed | 36 |
+| Failed (defect raised) | 18 |
+| Exploratory charters | 4 |
+| Automated | 54 / 54 (pytest: 36 passed, 18 xfailed, ~2 min 45 s; 3 of 4 full runs green, 1 UI timing flake) |
+| Requirements covered | 23 / 23 (13 fully passing, 10 with open defects) |
 
 ## Defects by area and severity
 
@@ -32,6 +32,13 @@ silently, so the recommendation is to **fix QC-05, QC-06 and QC-07 before the ne
   per client and ignores successful logins.
 - The register evaluates arithmetic (`100+50` → 150.00), rounds half-cents, and accepts the European format
   `1.234,56`.
+
+## Cycle 2: Budget module
+
+All six envelope-budgeting rules held: assigning, spending, rollover of positive balances, overspending taken from
+next month's To Budget, off-budget isolation, income. Money was conserved after every step (`TC-BUD-12`). The
+defects are again in **input parsing**: QC-06 also affects budget cells, and a new one, QC-11, lets a typo wipe an
+existing budget. The core logic is sound; the risk sits at the edges where users type numbers.
 
 ## Main risk
 

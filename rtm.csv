@@ -15,3 +15,10 @@ R-13,Transaction amounts are parsed consistently and correctly,TC-TX-01a; TC-TX-
 R-14,Account balance equals the sum of its transactions,TC-TX-02,1,0,,Covered - passed
 R-15,Transaction dates are valid calendar dates or rejected,TC-TX-05; TC-TX-06,0,2,"QC-07, QC-08",Covered - defects open
 R-16,Amounts are displayed correctly (no negative zero),TC-UI-01,0,1,QC-10,Covered - defects open
+R-17,To Budget = unassigned money in on-budget accounts,TC-BUD-01; TC-BUD-11; TC-BUD-12,3,0,,Covered - passed
+R-18,Assigning to a category moves money out of To Budget 1:1,TC-BUD-02; TC-BUD-12,2,0,,Covered - passed
+R-19,"Spending lowers the category balance, not To Budget",TC-BUD-06; TC-BUD-07; TC-BUD-12,3,0,,Covered - passed
+R-20,Positive category balances roll over to next month,TC-BUD-08; TC-BUD-12,2,0,,Covered - passed
+R-21,Overspending is taken from next month's To Budget,TC-BUD-09; TC-BUD-12,2,0,,Covered - passed
+R-22,Off-budget accounts never change To Budget,TC-BUD-10; TC-BUD-12,2,0,,Covered - passed
+R-23,Budget amounts are parsed correctly and typos never destroy data,TC-BUD-03; TC-BUD-04; TC-BUD-05,1,2,"QC-06, QC-11",Covered - defects open

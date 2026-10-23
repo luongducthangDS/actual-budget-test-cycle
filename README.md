@@ -9,11 +9,11 @@ in the transaction register.
 
 | | |
 |---|---|
-| Test cases | **42 scripted** (26 pass, 16 fail) + 3 exploratory charters |
-| Requirements traced | **16 / 16** ([RTM](rtm.csv)) |
-| Defects found | **10**: 7 Major, 2 Minor, 1 Trivial ([defect reports](docs/defect-reports.md)) |
-| Root cause identified | 3 of 10 (QC-01, QC-02, QC-04), each with a suggested fix |
-| Automation | 42 / 42 cases in pytest + Playwright, ~2 min, fresh server per test module |
+| Test cases | **54 scripted** in 2 cycles (36 pass, 18 fail) + 4 exploratory charters |
+| Requirements traced | **23 / 23** ([RTM](rtm.csv)): cycle 2 covers the Budget module (envelope rules, month rollover) |
+| Defects found | **11**: 7 Major, 3 Minor, 1 Trivial ([defect reports](docs/defect-reports.md)) |
+| Root cause identified | 3 of 11 (QC-01, QC-02, QC-04), each with a suggested fix |
+| Automation | 54 / 54 cases in pytest + Playwright, ~2 min 45 s, fresh server per test module |
 | False positives reported | **0**: one apparent critical finding was disproved by re-testing and withdrawn |
 
 ### Most important findings
@@ -26,15 +26,16 @@ in the transaction register.
 | QC-04 | Reloading the web app 3 times within a minute locks the browser out ("Too many requests"). Cause: the rate limiter also counts static files |
 | QC-01 | On a host without IPv6 the server prints "Listening on :::5006" and **exits with code 0**. Cause traced to an ignored error in Express 5's `listen` callback |
 | QC-02 | Sending a number as the password crashes setup with **HTTP 500** and leaks the server's stack trace and file paths |
+| QC-11 | Cycle 2: typing `abc` over a budget of 200 silently resets it to **0.00**; the envelope rules themselves (rollover, overspending, off-budget) all held |
 
 ## Deliverables
 
 | File | What it is |
 |---|---|
 | [docs/test-plan.md](docs/test-plan.md) | Objective, scope, risk-based approach, techniques, entry/exit criteria |
-| [test-cases.csv](test-cases.csv) | 45 cases: technique, test data, expected vs actual, status, defect link |
+| [test-cases.csv](test-cases.csv) | 58 cases: technique, test data, expected vs actual, status, defect link |
 | [rtm.csv](rtm.csv) | Requirement → test cases → result → defects |
-| [docs/defect-reports.md](docs/defect-reports.md) | 10 reports: steps, expected/actual, severity/priority, evidence, root cause, fix |
+| [docs/defect-reports.md](docs/defect-reports.md) | 11 reports: steps, expected/actual, severity/priority, evidence, root cause, fix |
 | [docs/test-summary-report.md](docs/test-summary-report.md) | Metrics, risks, product strengths, lessons, next cycle |
 | [evidence/](evidence/) | Screenshots and logs for every defect |
 | [automation/](automation/) | pytest + Playwright suite. Open defects are `xfail(strict)` tests that turn red when fixed |
@@ -45,12 +46,12 @@ in the transaction register.
 mkdir sut && cd sut && npm i @actual-app/sync-server@26.10.0 && cd ..
 pip install pytest requests playwright && playwright install chromium
 cd automation
-ACTUAL_DIR=../sut pytest                 # 26 passed, 16 xfailed
-ACTUAL_DIR=../sut pytest --runxfail      # shows the 16 failures behind the open defects
+ACTUAL_DIR=../sut pytest                 # 36 passed, 18 xfailed
+ACTUAL_DIR=../sut pytest --runxfail      # shows the 18 failures behind the open defects
 ```
 
-Known automation issue: on a busy 2-vCPU machine, the UI module's setup (creating the budget) timed out once in 4
-full runs. The next 3 runs were green. The next improvement is to wait on the budget-loaded network call instead of
+Known automation issue: on a busy 2-vCPU machine, one UI test timed out once in 4 full runs (cycle 1 and again
+after cycle 2 was added). The other runs were green. The next improvement is to wait on the budget-loaded network call instead of
 on page text.
 
 ## How I worked (and what I'd say in an interview)

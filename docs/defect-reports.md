@@ -10,12 +10,13 @@ Minor = workaround easy or low impact · Trivial = cosmetic.
 | ID | Title | Severity | Priority | Area |
 |---|---|---|---|---|
 | QC-05 | Starting balance `100+50` is saved as 10,050.00 | Major | P1 | Accounts |
-| QC-06 | `1e3` is saved as 13.00 (account dialog) and 1.00 (register) | Major | P1 | Accounts, Register |
+| QC-06 | `1e3` is saved as 13.00 (account dialog, budget cell) and 1.00 (register) | Major | P1 | Accounts, Register, Budget |
 | QC-07 | Date `02/30/2026` is saved as `02/03/2026` without warning | Major | P1 | Register |
 | QC-08 | Invalid date `13/45/2026` is replaced by today's date without warning | Major | P2 | Register |
 | QC-04 | Reloading the app 3 times within a minute locks the browser out | Major | P2 | Server / availability |
 | QC-01 | Server prints "Listening" and exits 0 when it cannot bind | Major | P2 | Server / deployment |
 | QC-02 | Non-string password crashes `/account/bootstrap` (HTTP 500, stack trace) | Major | P2 | Server / security |
+| QC-11 | A typo in a budget cell wipes the existing amount to 0.00 | Minor | P2 | Budget (cycle 2) |
 | QC-09 | Non-numeric amount saves a 0.00 transaction | Minor | P3 | Register |
 | QC-03 | A single space is accepted as the server password | Minor | P3 | Server / security |
 | QC-10 | Fresh budget shows `-0.00` | Trivial | P3 | Budget |
@@ -43,6 +44,7 @@ Minor = workaround easy or low impact · Trivial = cosmetic.
 - **Expected:** 1,000.00 everywhere, or "must be a number" (the dialog already rejects `abc`).
 - **Actual:** the account dialog stores **13.00**, the register stores **1.00**. Neither shows a warning.
 - **Evidence:** `QC-05_QC-06_account_balances.png`, `QC-06_QC-07_QC-08_QC-09_register.png`; tests `TC-ACC-04`, `TC-TX-03`.
+- **Cycle 2 update:** the budget cell has the same bug: `1e3` is budgeted as **13.00** (`TC-BUD-04`). Three money fields, two different wrong results.
 
 ## QC-07: Date `02/30/2026` is saved as `02/03/2026`
 
@@ -106,6 +108,17 @@ Minor = workaround easy or low impact · Trivial = cosmetic.
   which throws.
 - **Suggested fix:** `typeof password === "string" && password.length > 0`.
 - **Evidence:** `evidence/logs/QC-02_bootstrap_500.html`; tests `TC-AUTH-05a/b/c`, `TC-AUTH-06`.
+
+## QC-11: A typo in a budget cell wipes the existing amount (cycle 2)
+
+- **Severity / priority:** Minor / P2. The budget amount is lost silently and To Budget changes, but the change is
+  visible in the same cell and can be retyped.
+- **Steps:**
+  1. Budget page → Food → Budgeted, type `200` and press Enter.
+  2. Click the same cell, type `abc`, and press Enter.
+- **Expected:** the input is rejected and 200.00 stays (the account dialog rejects `abc` with "must be a number").
+- **Actual:** the budget becomes **0.00** and To Budget rises by 200. No warning is shown.
+- **Evidence:** test `TC-BUD-05`.
 
 ## QC-09: Non-numeric amount saves a 0.00 transaction
 

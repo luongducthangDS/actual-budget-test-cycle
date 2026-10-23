@@ -41,6 +41,19 @@ TC-TX-04,Register,R-13,Non-numeric amount not saved as zero,EP (invalid),abc,val
 TC-TX-05,Register,R-15,Impossible calendar date not silently changed,BVA (day 30 in Feb),02/30/2026,rejected or clearly corrected,saved as 02/03/2026,Fail,QC-07,automation/tests/test_ui_accounts_register.py
 TC-TX-06,Register,R-15,Garbage date not replaced by today,EP (invalid),13/45/2026,rejected,saved as today's date,Fail,QC-08,automation/tests/test_ui_accounts_register.py
 TC-UI-01,Budget,R-16,No negative zero on a fresh budget,Error guessing,new budget,0.00,-0.00 in Overspent/Budgeted/For next month,Fail,QC-10,automation/tests/test_ui_accounts_register.py
+TC-BUD-01,Budget,R-17,To Budget equals unassigned on-budget money,Calculation,"account 1,000","To Budget 1,000.00","1,000.00",Pass,,automation/tests/test_ui_budget.py
+TC-BUD-02,Budget,R-18,Assigning moves money out of To Budget 1:1,Calculation,Food = 300,"Food 300, To Budget 700",As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-03,Budget,R-23,Arithmetic in budget cell evaluated,EP valid,100+50,150.00,150.00,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-04,Budget,R-23,Scientific notation in budget cell,Error guessing,1e3,"1,000.00 or rejected",13.00 stored,Fail,QC-06,automation/tests/test_ui_budget.py
+TC-BUD-05,Budget,R-23,A typo does not wipe an existing budget,Error guessing,200 then 'abc',200.00 kept (or validation),"0.00, no warning",Fail,QC-11,automation/tests/test_ui_budget.py
+TC-BUD-06,Budget,R-19,"Spending lowers category balance, not To Budget",Calculation,pay 120 from Food,"Food spent -120, balance 180, To Budget unchanged",As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-07,Budget,R-19,Overspent category goes negative,BVA (spend > budget),pay 400 from General (150),balance -250,As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-08,Budget,R-20,Positive balance rolls over to next month,State (month change),Food 180 left,next month Food balance 180,As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-09,Budget,R-21,Overspending reduces next month's To Budget,State (month change),General -250,"next month: 'Overspent' -250, To Budget -250, General starts at 0",As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-10,Budget,R-22,Off-budget account does not change To Budget,EP,"off-budget 5,000",To Budget unchanged,As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-11,Budget,R-17,Income increases To Budget,Calculation,deposit 500 to Income,To Budget +500,As expected,Pass,,automation/tests/test_ui_budget.py
+TC-BUD-12,Budget,R-17..22,Money conserved: category balances + To Budget = on-budget money,Invariant,after all steps,equal,Equal,Pass,,automation/tests/test_ui_budget.py
 ET-01,Exploratory,—,Charter: explore first-run setup and login with odd inputs,Session-based,—,—,"Found QC-02, QC-03",Done,"QC-02, QC-03",manual
 ET-02,Exploratory,—,Charter: explore server start-up in a container,Session-based,—,—,Found QC-01 (root cause traced to Express 5 listen callback),Done,QC-01,manual
 ET-03,Exploratory,—,Charter: explore number and date entry across dialogs,Session-based,—,—,Found QC-05..QC-09; confirmed lenient locale parsing works,Done,QC-05..09,manual
+ET-04,Exploratory,—,Charter: explore budget cells and month rollover,Session-based,—,—,Found QC-11; confirmed QC-06 also affects budget cells,Done,"QC-06, QC-11",manual
