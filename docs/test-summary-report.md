@@ -12,7 +12,7 @@ silently, so the recommendation is to **fix QC-05, QC-06 and QC-07 before the ne
 | Passed | 36 |
 | Failed (defect raised) | 18 |
 | Exploratory charters | 4 |
-| Automated | 54 / 54 (pytest: 36 passed, 18 xfailed, ~2 min 45 s; 3 of 4 full runs green, 1 UI timing flake) |
+| Automated | 54 / 54 (pytest: 36 passed, 18 xfailed, ~2 min 45 s; 3 of 4 full runs green, 1 UI timing flake; latest run: [log](../evidence/logs/full_suite_run.txt)) |
 | Requirements covered | 23 / 23 (13 fully passing, 10 with open defects) |
 
 ## Defects by area and severity

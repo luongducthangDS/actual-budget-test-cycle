@@ -118,7 +118,7 @@ Minor = workaround easy or low impact · Trivial = cosmetic.
   2. Click the same cell, type `abc`, and press Enter.
 - **Expected:** the input is rejected and 200.00 stays (the account dialog rejects `abc` with "must be a number").
 - **Actual:** the budget becomes **0.00** and To Budget rises by 200. No warning is shown.
-- **Evidence:** test `TC-BUD-05`.
+- **Evidence:** test `TC-BUD-05`; [before](../evidence/screenshots/QC-11_before.png) / [after](../evidence/screenshots/QC-11_after.png) / [full page](../evidence/screenshots/QC-11_after_full.png); [steps log](../evidence/logs/QC-11_steps.txt) (200 → 0.00, To Budget 800 → 1,000, no warning), reproduced with `automation/capture_qc11.py`.
 
 ## QC-09: Non-numeric amount saves a 0.00 transaction
 
