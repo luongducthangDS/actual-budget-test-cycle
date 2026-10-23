@@ -19,7 +19,7 @@ import pytest
 import requests
 from requests.adapters import HTTPAdapter
 
-ACTUAL_DIR = Path(os.getenv("ACTUAL_DIR", "../sut"))  # folder where `npm i @actual-app/sync-server@26.10.0` was run
+ACTUAL_DIR = Path(os.getenv("ACTUAL_DIR", "../sut")).resolve()  # folder where `npm i @actual-app/sync-server@26.10.0` was run
 SERVER_BIN = ACTUAL_DIR / "node_modules" / ".bin" / "actual-server"
 PASSWORD = "qc-Password-1"
 _ips = itertools.count(20)

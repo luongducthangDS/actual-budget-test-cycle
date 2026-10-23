@@ -18,9 +18,11 @@ jobs:
 
       - name: Install System Under Test (Actual Budget Server 26.10.0)
         run: |
-          mkdir sut
+          mkdir -p sut
           cd sut
+          npm init -y
           npm i @actual-app/sync-server@26.10.0
+          chmod +x node_modules/.bin/* || true
 
       - name: Setup Python 3.12
         uses: actions/setup-python@v5
