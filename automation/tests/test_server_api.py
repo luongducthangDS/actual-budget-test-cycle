@@ -5,12 +5,10 @@ xfail(strict=True, raises=AssertionError) with the defect id: they assert the EX
 the day the defect is fixed and the test must be promoted to a normal regression test.
 """
 import subprocess
-import time
 from pathlib import Path
 
 import pytest
 import requests
-
 from conftest import PASSWORD, Server, client
 
 

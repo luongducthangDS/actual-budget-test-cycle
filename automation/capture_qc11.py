@@ -8,8 +8,8 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 sys.path.insert(0, str(Path(__file__).parent / "tests"))
-from conftest import PASSWORD, Server  # noqa: E402
-from test_ui_budget import add_account, assign, category_value, open_budget, row, to_budget  # noqa: E402
+from conftest import PASSWORD, Server
+from test_ui_budget import add_account, assign, category_value, open_budget, row, to_budget
 
 EV = Path(__file__).resolve().parents[1] / "evidence"
 
